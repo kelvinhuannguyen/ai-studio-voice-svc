@@ -8,11 +8,29 @@ omnivoice
 
 # Audio Processing
 pydub
+numpy
 
 # Backend API
 fastapi
-uvicorn
+uvicorn[standard]
 python-multipart
+httpx
 
 # Utilities
 tqdm
+python-dotenv
+
+# ─── Phase I — voice-svc bundle ──────────────────────────────────────────────
+# Whisper ASR (faster-whisper is ~5x quicker than openai-whisper at same quality)
+faster-whisper>=1.0
+
+# CosyVoice2 — multilingual zero-shot clone. CosyVoice is unreleased on PyPI as
+# of this writing; install via:
+#   pip install git+https://github.com/FunAudioLLM/CosyVoice.git
+# (or pin to a specific commit). Required system deps: ffmpeg.
+
+# Demucs — vocals/music source separation (CLI used; library imported for sanity)
+demucs>=4.0
+
+# yt-dlp — YouTube/Vimeo ingest for Phase J Quick Dub
+yt-dlp>=2024.1

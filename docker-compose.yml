@@ -1,0 +1,42 @@
+# Dev convenience — run the unified voice service locally with one command.
+# Mounts Voice_ref/ and HF cache as volumes so model downloads persist across
+# rebuilds.
+#
+# Usage:
+#   docker compose up --build           # starts the service on :8000
+#   docker compose down                  # stops + cleans up
+#
+# Prod deploys should set VOICE_SVC_AUTH_TOKEN to a strong secret and pin
+# ALLOWED_ORIGIN to your V2 worker-py egress (Railway / Vercel) range.
+
+services:
+  voice-svc:
+    build: .
+    image: ai-studio-voice-svc:dev
+    container_name: voice-svc
+    ports:
+      - "8000:8000"
+    environment:
+      VOICE_SVC_AUTH_TOKEN: ${VOICE_SVC_AUTH_TOKEN:-dev-secret-change-me}
+      ALLOWED_ORIGIN: ${ALLOWED_ORIGIN:-*}
+      VOICE_SVC_VRAM_CEILING_GB: ${VOICE_SVC_VRAM_CEILING_GB:-12.0}
+    volumes:
+      - ./voice_ref_data:/app/audiobook_builder/Voice_ref
+      - ./hf_cache:/root/.cache/huggingface
+      - ./torch_cache:/root/.cache/torch
+    restart: unless-stopped
+    # Comment out the deploy.resources block if you don't have an NVIDIA GPU
+    # on the host — the service will fall back to CPU (slower but functional).
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 120s
+      retries: 3
