@@ -1,0 +1,13 @@
+# Force LF line endings for shell scripts — must be LF for bash on Linux.
+*.sh text eol=lf
+
+# Python source: LF (POSIX convention)
+*.py text eol=lf
+
+# Dockerfile + compose: LF
+Dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+
+# YAML: LF (most parsers accept either but LF is convention)
+*.yml text eol=lf
+*.yaml text eol=lf
