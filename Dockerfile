@@ -4,7 +4,7 @@
 # + Demucs + yt-dlp) behind one FastAPI on port 8000.
 # Built for NVIDIA GPU on FPT Smart Cloud (H100 / T4).
 # ──────────────────────────────────────────────────────────────────────────────
-FROM nvidia/cuda:12.1.1-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
@@ -29,8 +29,8 @@ WORKDIR /app
 COPY audiobook_builder/requirements.txt /app/requirements.txt
 RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel \
  && pip3 install --no-cache-dir \
-        torch==2.3.0 torchaudio==2.3.0 \
-        --index-url https://download.pytorch.org/whl/cu121 \
+        torch==2.4.1 torchaudio==2.4.1 \
+        --index-url https://download.pytorch.org/whl/cu124 \
  && pip3 install --no-cache-dir -r /app/requirements.txt \
  # CosyVoice has no PyPI wheel — install from upstream. Allowed to fail at
  # image build; CosyVoice endpoints return 503 until manually fixed.
