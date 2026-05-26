@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.6
 # ──────────────────────────────────────────────────────────────────────────────
 # ai-studio-voice-svc — unified voice service (OmniVoice + CosyVoice + Whisper
 # + Demucs + yt-dlp) behind one FastAPI on port 8000.
